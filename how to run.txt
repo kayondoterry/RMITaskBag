@@ -7,10 +7,10 @@ javac -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson
 javac -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar *.java
 
 TWO - start registry
-#linux
+#linux (leave the terminal open after this command, use a different terminal for the commands below)
 rmiregistry &
 
-#windows
+#windows (a new terminal window opens if successful, leave this window open)
 start rmiregistry
 
 --------------------------------------------------------------------------
