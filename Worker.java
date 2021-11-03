@@ -39,6 +39,8 @@ public class Worker {
           String resultId = getResultId(range);
           subTaskString = generateSubTaskString(subTasks.subList(1, subTasks.size()));
           
+          System.out.println("Received Task: " + resultId);
+
           taskBagRemote.placePair("Task", subTaskString);
 
           List<Integer> result = new ArrayList<>();
@@ -51,6 +53,8 @@ public class Worker {
 
           String resultString = generateResultString(result);
           taskBagRemote.placePair(resultId, resultString);
+
+          System.out.println("Finished Task: " + resultId);
 
           if(subTasks.size() <= 1) {
             break;
