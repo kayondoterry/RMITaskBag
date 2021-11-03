@@ -13,6 +13,11 @@ rmiregistry &
 #windows
 start rmiregistry
 
+--------------------------------------------------------------------------
+NOTE: RUN THE COMMANDS BELOW IN SEPARATE TERMINALS
+NOTE: YOU CAN CREATE AS MANY WORKERS AS YOU LIKE (IN SEPARATE TERMINALS)
+
+
 THREE - start task bag
 #linux
 java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar -Djava.rmi.server.codebase:file:./ TaskBag
@@ -30,7 +35,7 @@ java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-
 
 FIVE - start master
 #linux
-java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Master
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Master localhost
 
 #windows
-java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Master
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Master localhost
