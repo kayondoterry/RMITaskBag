@@ -1,0 +1,36 @@
+
+ONE - compile
+#linux
+javac -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar *.java
+
+#windows
+javac -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar *.java
+
+TWO - start registry
+#linux
+rmiregistry &
+
+#windows
+start rmiregistry
+
+THREE - start task bag
+#linux
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar -Djava.rmi.server.codebase:file:./ TaskBag
+
+#windows
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar -Djava.rmi.server.codebase:file:.\ TaskBag
+
+FOUR - start worker(s)
+#linux
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Worker
+
+#windows
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Worker
+
+
+FIVE - start master
+#linux
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Master
+
+#windows
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Master
