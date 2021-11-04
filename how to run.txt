@@ -27,15 +27,15 @@ java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-
 
 FOUR - start worker(s)
 #linux
-java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Worker
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Worker <hostname>
 
 #windows
-java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Worker
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Worker <hostname>
 
 
 FIVE - start master
 #linux
-java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Master localhost
+java -cp .:./jackson-core-2.13.0.jar:./jackson-annotations-2.13.0.jar:./jackson-databind-2.13.0.jar Master <hostname>
 
 #windows
-java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Master localhost
+java -cp .;.\jackson-core-2.13.0.jar;.\jackson-annotations-2.13.0.jar;.\jackson-databind-2.13.0.jar Master <hostname>
