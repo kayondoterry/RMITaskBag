@@ -20,7 +20,7 @@ public class Master {
   // name of TaskBag on rmiregistry
   private String taskBagName = "TaskBag";
   // holds results of computations by workers
-  private Map<String, List<Integer>> results;
+  private TreeMap<String, List<Integer>> results;
   // prime numbers between 1 and N
   // subTaskSize is the range of numbers for each subtask processed by a worker
   private int N, subTaskSize;
