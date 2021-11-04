@@ -20,12 +20,21 @@ public class Master {
   private int N, subTaskSize;
 
   public Master(String taskBagHostname, int N, int subTaskSize) {
-    results = new TreeMap<>();
+    this.results = new TreeMap<>();
     this.N = N;
     this.subTaskSize = subTaskSize;
+    this.hostname = taskBagHostname;
   }
 
   public static void main(String[] args) {
+
+    String host = "";
+    try{
+      host = args[0];
+    }catch(Exception e){
+      System.out.println("usage: Master <hostname>");
+      return;
+    }
 
     Scanner in = new Scanner(System.in);
 
@@ -36,7 +45,7 @@ public class Master {
     int subTaskSize= in.nextInt();
 
 
-    Master master = new Master(args[0], N, subTaskSize);
+    Master master = new Master(host, N, subTaskSize);
     master.run();
 
   }
