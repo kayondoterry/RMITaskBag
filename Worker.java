@@ -14,8 +14,20 @@ public class Worker {
   private String hostname = "localhost";
   private String taskBagName = "TaskBag";
 
+  public Worker(String taskBagHostname) {
+    this.hostname = taskBagHostname;
+  }
+
   public static void main(String[] args) {
-    Worker worker = new Worker();
+    String host = "";
+    try{
+      host = args[0];
+    }catch(Exception e){
+      System.out.println("usage: Worker <hostname>");
+      return;
+    }
+
+    Worker worker = new Worker(host);
     worker.run();
   }
 
