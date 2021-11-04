@@ -18,7 +18,7 @@ public class Worker {
   // name of TaskBag on rmiregistry
   private String taskBagName = "TaskBag";
 
-  final long WAIT_TIME = 4000L;
+  final long WAIT_TIME = 2000L;
 
   public Worker(String taskBagHostname) {
     this.hostname = taskBagHostname;
