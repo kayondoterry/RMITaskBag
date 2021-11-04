@@ -37,18 +37,18 @@ public class TaskBag implements TaskBagRemote {
   @Override
   synchronized public void placePair(String key, String value) {
     taskBag.put(key, value);
-    System.out.println("Placed pair: [key: "+key+",value: "+value+"]\n");
+    System.out.println("placePair() called: [key: "+key+",value: "+value+"]\n");
   }
 
   @Override
   synchronized public String takePair(String key) {
-    System.out.println("Pair taken: [key: "+key+"]\n");
+    System.out.println("takePair() called: [key: "+key+"]\n");
     return taskBag.get(key);
   }
 
   @Override
   synchronized public String removePair(String key) {
-    System.out.println("Pair removed: [key: "+key+"]\n");
+    System.out.println("removePair() called: [key: "+key+"]\n");
     return taskBag.remove(key);
   }
 
