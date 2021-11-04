@@ -56,6 +56,11 @@ public class Worker {
 
           if(subTasks.size() < 1) {
             // tasks are finished, exit
+            
+            // but first, put the subtasks back so other Workers do the same
+            taskBagRemote.placePair("Task", subTaskString);
+            
+            // exit
             break;
           }
 
