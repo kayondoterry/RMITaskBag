@@ -17,6 +17,7 @@ public class Master {
 
   // host machine of the TaskBag
   private String hostname = "localhost";
+  // name of TaskBag on rmiregistry
   private String taskBagName = "TaskBag";
   // holds results of computations by workers
   private Map<String, List<Integer>> results;
@@ -66,7 +67,7 @@ public class Master {
 
     try {
       // connect to rmiregistry of TaskBag host machine
-      Registry registry = LocateRegistry.getRegistry(hostname); // TODO getRegistry()
+      Registry registry = LocateRegistry.getRegistry(hostname);
       TaskBagRemote taskBagRemote = (TaskBagRemote) registry.lookup(taskBagName);
 
       // add sub tasks to the remote TaskBag
