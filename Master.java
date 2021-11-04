@@ -1,11 +1,33 @@
+import java.io.PrintWriter;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.TreeMap;PrintWriter writer = null;
+    try {
+      writer = new PrintWriter("primes between 1 and " + N, "UTF-8");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    // print the results
+    for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
+      List<Integer> primes = entry.getValue();
+      for (Integer prime : primes) {
+        System.out.println(prime);
+        if(writer!=null) {
+          writer.println(prime);
+        }
+      }
+    }
+
+    if(writer != null) {
+      writer.close();
+    }
 
 // used for json serializing and deserializing
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,7 +48,14 @@ public class Master {
   private int N, subTaskSize;
 
   public Master(String taskBagHostname, int N, int subTaskSize) {
-    this.results = new TreeMap<>();
+    this.results = new TreeMap<>(new Comparator<String>() {
+      @Override
+      public int compare(String s1, String s2) {
+          Integer num1 = Integer.parseInt(s1.split("-")[0]);
+          Integer num2 = Integer.parseInt(s2.split("-")[0]);
+          return num1.compareTo(num2);
+      }
+  });
     this.N = N;
     this.subTaskSize = subTaskSize;
     this.hostname = taskBagHostname;
@@ -102,11 +131,26 @@ public class Master {
     
     System.out.println("The prime numbers between 1 and " + N + " are:\n");
     // print the results
+    PrintWriter writer = null;
+    try {
+      writer = new PrintWriter("primes between 1 and " + N, "UTF-8");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    // print the results
     for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
       List<Integer> primes = entry.getValue();
       for (Integer prime : primes) {
-        System.out.print(prime + ", ");
+        System.out.println(prime);
+        if(writer!=null) {
+          writer.println(prime);
+        }
       }
+    }
+
+    if(writer != null) {
+      writer.close();
     }
 
   }
