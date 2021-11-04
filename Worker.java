@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.lang.Thread.sleep;
 
 public class Worker {
 
@@ -18,7 +17,8 @@ public class Worker {
   // name of TaskBag on rmiregistry
   private String taskBagName = "TaskBag";
 
-  final long WAIT_TIME = 2000L;
+  private final String NEXT_TASK = "NextTask";
+
 
   public Worker(String taskBagHostname) {
     this.hostname = taskBagHostname;
@@ -46,23 +46,13 @@ public class Worker {
 
       System.out.println("Worker started\n");
 
-      // start polling for the "Task" pair
+      // start polling for the "NEXT_TASK" pair
       while (true) {
-        // remove "Task" pair so other Workers don't get the same subtask
-        String subTaskString = taskBagRemote.removePair("Task");
+        // remove "NEXT_TASK" pair so other Workers don't get the same subtask
+        String subTaskString = taskBagRemote.removePair(NEXT_TASK);
         if (subTaskString != null) {
           // decoded subtasks from JSON string
           List<List<Integer>> subTasks = getSubtasks(subTaskString);
-
-          if(subTasks.size() < 1) {
-            // tasks are finished, exit
-            
-            // but first, put the subtasks back so other Workers do the same
-            taskBagRemote.placePair("Task", subTaskString);
-            
-            // exit
-            break;
-          }
 
           // get first subtask in the list of subtasks
           List<Integer> range = subTasks.get(0);
@@ -72,8 +62,11 @@ public class Worker {
           
           System.out.println("Received Task: " + resultId);
 
-          // put back remaining subtasks on the TaskBag
-          taskBagRemote.placePair("Task", subTaskString);
+          if(subTasks.size() > 1) {
+            // there are more subtasks, put back remaining subtasks on the TaskBag
+            taskBagRemote.placePair(NEXT_TASK, subTaskString);
+          }
+          
 
           // for storing prime numbers found
           List<Integer> result = new ArrayList<>();
@@ -92,14 +85,7 @@ public class Worker {
 
           System.out.println("Finished Task: " + resultId);
 
-          if(subTasks.size() <= 1) {
-            // this subtask was the last task, exit
-            break;
-          }
 
-        } else {
-          // if no "Task" pair is in the TaskBag, check again in WAIT_TIME seconds
-          sleep(WAIT_TIME);
         }
       }
 
