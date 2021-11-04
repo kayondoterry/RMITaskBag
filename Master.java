@@ -23,12 +23,15 @@ public class Master {
   // name of TaskBag on rmiregistry
   private String taskBagName = "TaskBag";
 
+  // results from Workers stored here
   private TreeMap<String, List<Integer>> results;
+
+  private final String NEXT_TASK = "NextTask";
 
   // prime numbers between 1 and N
   // subTaskSize is the range of numbers for each subtask processed by a worker
-  private int N, subTaskSize;
-  public Master(String taskBagHostname, int N, int subTaskSize) {
+  private int MAX, subTaskSize;
+  public Master(String taskBagHostname, int MAX, int subTaskSize) {
     this.results = new TreeMap<>(new Comparator<String>() {
       @Override
       public int compare(String s1, String s2) {
@@ -37,7 +40,7 @@ public class Master {
           return num1.compareTo(num2);
       }
     });
-    this.N = N;
+    this.MAX = MAX;
     this.subTaskSize = subTaskSize;
     this.hostname = taskBagHostname;
   }
@@ -52,17 +55,26 @@ public class Master {
     }
     Scanner in = new Scanner(System.in);
     // get required information from users
-    System.out.println("Prime numbers between 1 and N.");
-    System.out.println("Enter N: ");
-    int N= in.nextInt();
-    System.out.println("Enter range size for each sub task: ");
-    int subTaskSize= in.nextInt();
-    Master master = new Master(host, N, subTaskSize);
-    master.run();
+    while(true) {
+      System.out.println("Prime numbers between 1 and MAX.");
+      System.out.println("Enter MAX: (-1 to quit)");
+      int MAX = in.nextInt();
+      if(MAX == -1) {
+        break;
+      }
+      if(MAX < 1) {
+        System.out.println("MAX must be greater than 0");
+        break;
+      }
+      System.out.println("Enter range size for each sub task: ");
+      int subTaskSize= in.nextInt();
+      Master master = new Master(host, MAX, subTaskSize);
+      master.run();
+    }
   }
   public void run() {
     // break Task into subtasks
-    List<List<Integer>> subTasks = generateSubTasks(N, subTaskSize);
+    List<List<Integer>> subTasks = generateSubTasks(MAX, subTaskSize);
     // subTasks encoded as JSON String
     // Strings can be sent to remote objects because they implement the Serializable interface
     String subTaskString = generateSubTaskString(subTasks);
@@ -71,7 +83,7 @@ public class Master {
       Registry registry = LocateRegistry.getRegistry(hostname);
       TaskBagRemote taskBagRemote = (TaskBagRemote) registry.lookup(taskBagName);
       // add sub tasks to the remote TaskBag
-      taskBagRemote.placePair("Task", subTaskString);
+      taskBagRemote.placePair(NEXT_TASK, subTaskString);
       // used for progress updates
       int totalSubTasks = subTasks.size();
       System.out.println("Master started\nwaiting for workers.......\n");
@@ -95,20 +107,20 @@ public class Master {
       e.printStackTrace();
     }
     
-    System.out.println("The prime numbers between 1 and " + N + " are:\n");
+    System.out.println("The prime numbers between 1 and " + MAX + " are:\n");
 
     // print the results on stdout and a file
     PrintWriter writer = null;
     try {
-      writer = new PrintWriter("primes between 1 and " + N, "UTF-8");
+      writer = new PrintWriter("primes between 1 and " + MAX, "UTF-8");
     } catch (Exception e) {
-      e.printStackTrace();
+      System.out.println("Error: Failed to create results file");
+      return;
     }
 
     for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
       List<Integer> primes = entry.getValue();
       for (Integer prime : primes) {
-        System.out.println(prime);
         if(writer!=null) {
           writer.println(prime);
         }
@@ -117,7 +129,9 @@ public class Master {
 
     if(writer != null) {
       writer.close();
+      System.out.println("Task results written to file: primes between 1 and " + MAX);
     }
+
   }
   // breaks a Task into subtasks
   private List<List<Integer>> generateSubTasks(int N, int subTaskSize) {
