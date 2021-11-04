@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TaskBag implements TaskBagRemote {
+  // used to store pairs
   private final Map<String, String> taskBag;
+  // name of TaskBag in rmiregistry
   private String taskBagName = "TaskBag";
 
   public TaskBag() {
@@ -19,6 +21,7 @@ public class TaskBag implements TaskBagRemote {
 
   public void run() {
     try {
+      // create TaskBag stub to be remotely invoked by Master and Workers
       TaskBagRemote stub = (TaskBagRemote) UnicastRemoteObject.exportObject(this, 0);
       Registry registry = LocateRegistry.getRegistry();
       registry.rebind(taskBagName, stub);
@@ -28,6 +31,8 @@ public class TaskBag implements TaskBagRemote {
       e.printStackTrace();
     }
   }
+
+  // methods synchronized to ensure that only one Worker gets a subtask at a time
 
   @Override
   synchronized public void placePair(String key, String value) {
