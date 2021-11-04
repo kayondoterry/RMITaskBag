@@ -23,7 +23,7 @@ public class Master {
   private Map<String, List<Integer>> results;
   // prime numbers between 1 and N
   // subTaskSize is the range of numbers for each subtask processed by a worker
-  private int N, subTaskSize; /
+  private int N, subTaskSize;
 
   public Master(String taskBagHostname, int N, int subTaskSize) {
     this.results = new TreeMap<>();
